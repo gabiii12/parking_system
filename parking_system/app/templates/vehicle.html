@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+    <h1>EMPLOYEE VEHICLE</h1>
+    <table>
+        <tr>
+          <th>CARD UID</th>
+          <th>EMPLOYEE NAME</th>  
+          <th>VEHICLE PLATE/th>  
+
+        </tr>
+        {% for row in logs %}
+        <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+</body>
+
+
+</html>
