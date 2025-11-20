@@ -10,7 +10,7 @@ from insert_data import attendance
 port = 'COM3'
 baud = 9600
 
-
+print("Change 1")
 class RFID:
     def __init__(self):
         self.student_id = ""
