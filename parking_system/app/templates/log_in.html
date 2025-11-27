@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url("../static/images/tam.jpg");
+    background-size: cover;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-blend-mode: darken;
+    color: white;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    opacity: 0.85;
+}
+
+.card {
+    display: flex;               /* side by side */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.box {
+    width: 350px;
+    padding: 30px;
+    height: 400px;
+    background-color: #94343C;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-img {
+    width: 400px;       /* image width */
+    object-fit: cover;
+}
+
+.box label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.box input {
+    border-radius: 5px;
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+.box button {
+    width: 100%;
+    height: 35px;
+    border-radius: 5px;
+    border: none;
+    background: #D06770;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.flash-message {
+    color: red;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <!-- LEFT: Form -->
+        <div class="box">
+            <form action="/login" method="POST">
+                <label>Log in</label>
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <div class="flash-message">
+                    {% for message in messages %}
+                      {{ message }}
+                    {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+
+                <input type="text" name="username" placeholder="Username" required>
+
+                <input type="password" name="password" placeholder="Password" required>
+
+                <button type="submit">Log in</button>
+            </form>
+        </div>
+
+        <img src="../static/images/tam.jpg" class="card-img">
+    </div>
+</div>
+
+</body>
+</html>

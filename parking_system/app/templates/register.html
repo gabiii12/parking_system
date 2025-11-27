@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Register Employee Vehicle — Parking Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-image:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url("../static/images/tam.jpg");
+        background-size: cover;
+        color: #fff;
+    }
+
+    .container-top {
+        width: 100%;
+        background-color: #76262C;
+        height: 70px;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .container-top h1 {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .container-top img {
+        width: 80px;
+    }
+
+    .container {
+        display: flex;
+        width: 100%;
+    }
+
+    .side_bar {
+            width: 200px;
+            min-width: 180px;
+            background-color: #2B0F10;
+            padding-top: 20px;
+            height: 100vh;
+        }
+
+        .side_bar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .side_bar ul li {
+            margin-bottom: 40px;
+        }
+
+        .side_bar a {
+            text-decoration: none;
+            color: white;
+            padding: 12px 20px;
+            display: block;
+        }
+
+        .side_bar a:hover {
+            background-color: #3E40AF;
+        }
+
+    .box {
+        flex: 1;
+        background: #5E6060;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        opacity: 0.95;
+    }
+
+    h2.title {
+        margin-top: 0;
+        font-size: 22px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        background: rgba(255,255,255,0.12);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    label {
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    input[type="text"], select {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.12);
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+        color: #222;
+    }
+
+    select {
+        background-color: #fff;
+    }
+
+    button.submit-btn {
+        background-color: #7B2021;
+        color: white;
+        padding: 12px 18px;
+        font-size: 15px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: background .15s ease;
+    }
+
+    button.submit-btn:hover {
+        background-color: #9c2b2e;
+    }
+
+    .result {
+        margin-top: 10px;
+        background: rgba(0,0,0,0.12);
+        padding: 10px 12px;
+        border-radius: 8px;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #dff0d8;
+    }.flash.error{
+        color: red;
+    }
+</style>
+</head>
+<body>
+<div class="container-top">
+    <h1>PARKING MANAGEMENT</h1>
+    <img src="../static/images/ccs.png" alt="Logo" onerror="this.style.display='none'">
+</div>
+
+<div class="container">
+
+    <div class="side_bar">
+        <ul>
+            <li><a href="{{url_for('vehicle')}}"><i class="fa-solid fa-address-book"></i> Employee Vehicle</a></li>
+            <li><a href="{{url_for('park_logs')}}"><i class="fa-solid fa-car"></i> Parking Logs</a></li>
+            <li><a href="{{url_for('acc_info')}}"><i class="fa-solid fa-user"></i> User Information</a></li>
+            <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
+        </ul>
+    </div>
+
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <li class = "flash">{{ message }}</li>
+      {% endfor %}
+    </ul>
+        {% endif %}
+            {% endwith %}
+        <h2 class="title">Register Employee Vehicle</h2>
+        <form id="regForm" method="POST" action="{{ url_for('reg') }}">
+            <div>
+                <label for="uid">CARD UID</label>
+                <input id="uid" name="uid" type="text" placeholder="Enter your CARD UID" required>
+            </div>
+            <div>
+                <label for="nm">EMPLOYEE NAME</label>
+                <input id="nm" name="nm" type="text" placeholder="Surname, Firstname M." required>
+            </div>
+            <div>
+                <label for="vehicle_type">VEHICLE TYPE</label>
+                <select id="vehicle_type" name="vehicle_type" required>
+                    <option value="" disabled selected>Select Vehicle Type</option>
+                    <option value="Sedan">Sedan</option>
+                    <option value="SUV">SUV</option>
+                    <option value="Motorcycle">Motorcycle</option>
+                    <option value="Hatchback">Hatchback</option>
+                    <option value="Pickup">Pickup</option>
+                    <option value="Van">Van</option>
+                    <option value="Bicycle">Bicycle</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label for="vehicle_plate">VEHICLE PLATE</label>
+                <input id="vehicle_plate" name="vehicle_plate" type="text" placeholder="e.g. ABC1234" required>
+            </div>
+            <div style="display:flex; justify-content:flex-end;">
+                <button type="submit" class="submit-btn">REGISTER</button>
+            </div>
+        </form>
+        <div id="resultBox" class="result">
+            <i class="fa-solid fa-circle-check"></i><span id="resultText">Vehicle registered.</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
