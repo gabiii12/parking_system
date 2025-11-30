@@ -3,7 +3,7 @@ import serial
 import time
 import mysql.connector
 
-port = 'COM3'
+port = 'COM4'
 baud = 9600
 class Parking:
     def __init__(self):
@@ -37,13 +37,16 @@ class Parking:
                 else:
                     new_status = "ENTRY"
 
+                if employee_name == 'admin':
+                    print("ADMIN")
+                else:
 
-                insert_data = """INSERT INTO parking_logs (card_uid, employee_name, vehicle_plate, last_action)
-                            VALUES(%s,%s,%s,%s)
-                """
-                cursor.execute(insert_data,(self.tag_id,employee_name,vehicle_plate,new_status))
-                self.db.conn.commit()
-                print("INSERTED!")
+                    insert_data = """INSERT INTO parking_logs (card_uid, employee_name, vehicle_plate, last_action)
+                                VALUES(%s,%s,%s,%s)
+                    """
+                    cursor.execute(insert_data,(self.tag_id,employee_name,vehicle_plate,new_status))
+                    self.db.conn.commit()
+                    print("INSERTED!")
             except mysql.connector.Error as e:
                 print(f"Error {e}")
         else:

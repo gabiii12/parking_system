@@ -147,6 +147,20 @@ def reg():
 
     return render_template('register.html')
 
+@app.route('/delete_log', methods=['POST'])
+def delete_log():
+    if request.method == 'POST':
+        db = get_db_connection()
+        cursor = db.cursor()
+        card_uid = request.form['uid']
+        cursor.execute("DELETE FROM employee_vehicle WHERE card_uid = %s", (card_uid,))
+        db.commit()
+
+        db.close()
+        cursor.close()
+
+        return redirect(url_for('vehicle'))
+
 
 
 

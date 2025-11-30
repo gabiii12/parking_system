@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -8,15 +9,14 @@
             margin: 0;
             background: linear-gradient(to bottom, #161717, #241F24);
             font-family: 'Inter', sans-serif;
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+            background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
             url("../static/images/tam.jpg");
             background-size: cover;
-
         }
 
         .container-top {
             width: 100%;
-            background-color: #76262C;
+            background-color:#76262C;
             height: 70px;
             padding: 10px 20px;
             color: white;
@@ -38,6 +38,7 @@
         .container {
             display: flex;
             width: 100%;
+            height: calc(100vh - 80px);
         }
 
         .side_bar {
@@ -45,7 +46,7 @@
             min-width: 180px;
             background-color: #2B0F10;
             padding-top: 20px;
-            height: 100vh;
+            height: 100%;
         }
 
         .side_bar ul {
@@ -87,7 +88,6 @@
         th, td {
             padding: 12px;
             text-align: left;
-            width: 25%; 
         }
 
         th {
@@ -99,7 +99,16 @@
         td {
             background: #fff;
             border-radius: 5px;
+        }.entry{
+            color:green;
+            font-weight: bold;
+        }.exit{
+            color:red;
+            font-weight: bold;
+        }#delete{
+            color: red;
         }
+
     </style>
 </head>
 <body>
@@ -120,17 +129,22 @@
                 <li><a href="{{url_for('acc_info')}}"><i class="fa-solid fa-user"></i> User Information</a></li>
                 <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
+
             </ul>
         </div>
-
-        <!-- TABLE SECTION -->
+        
         <div class="box">
-            <table>
+            <input type="text" id="uidf" placeholder="Filter by CARD UID" class="filter-input">
+
+            <table id="history">
                 <tr>
                     <th>CARD UID</th>
                     <th>EMPLOYEE NAME</th>
-                    <th>VEHICLE TYPE</th>
                     <th>VEHICLE PLATE</th>
+                    <th>LAST ACTION</th>
+                    <th>TIME</th>
+
+
                 </tr>
 
                 {% for row in logs %}
@@ -138,13 +152,35 @@
                     <td>{{row[0]}}</td>
                     <td>{{row[1]}}</td>
                     <td>{{row[2]}}</td>
-                    <td>{{row[3]}}</td>
+                    <td class ="{{'entry' if row[3] == 'ENTRY' else 'exit'}}">{{row[3]}}</td>
+                    <td>{{row[4]}}</td>
+                    
                 </tr>
                 {% endfor %}
             </table>
         </div>
 
     </div>
+    <script>
+        const uidint = document.getElementById('uidf');
+        const table = document.getElementById('history');
+
+        uidint.addEventListener('keyup', function(){
+            const filter = uidint.value.toUpperCase();
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i <trs.length; i++){
+                const td = trs[i].getElementsByTagName('td')[0];
+                if(td){
+                    const value = td.textContent || td.innerText;
+                    trs[i].style.display = value.toUpperCase().includes(filter) ? '':'none';
+                }
+            }
+        });
+
+
+
+    </script>
 
 </body>
 </html>
