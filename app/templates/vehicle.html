@@ -100,6 +100,17 @@
             background: #fff;
             border-radius: 5px;
         }
+        .box button{
+            color: white;
+            border-radius: 5px;
+            border-color: red;
+            background-color: red;
+
+        }.box button:hover{
+            transform: scale(1.05);
+            transition: 0.2s;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +128,6 @@
             <ul>
                 <li><a href="{{url_for('vehicle')}}"><i class="fa-solid fa-address-book"></i> Employee Vehicle</a></li>
                 <li><a href="{{url_for('park_logs')}}"><i class="fa-solid fa-car"></i> Parking Logs</a></li>
-                <li><a href="{{url_for('acc_info')}}"><i class="fa-solid fa-user"></i> User Information</a></li>
                 <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
             </ul>
@@ -129,6 +139,7 @@
                 <tr>
                     <th>CARD UID</th>
                     <th>EMPLOYEE NAME</th>
+                    <th>POSITION</th>
                     <th>VEHICLE TYPE</th>
                     <th>VEHICLE PLATE</th>
                     <th>ACTION</th>
@@ -140,6 +151,7 @@
                     <td>{{row[1]}}</td>
                     <td>{{row[2]}}</td>
                     <td>{{row[3]}}</td>
+                    <td>{{row[4]}}</td>
                     <td>
                     <form action="{{url_for('delete_log')}}" method = 'POST'
                         onsubmit="return confirm('Delete this EMPLOYEE?')">

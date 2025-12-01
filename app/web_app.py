@@ -62,7 +62,7 @@ def vehicle():
     cursor = db.cursor()
 
     cursor.execute("""
-        SELECT card_uid, employee_name,vehicle_type, vehicle_plate 
+        SELECT *
         FROM employee_vehicle
     """)
     logs = cursor.fetchall()
@@ -70,41 +70,6 @@ def vehicle():
     db.close()
 
     return render_template("vehicle.html", logs=logs)
-@app.route('/acc')
-def acc_info():
-    db = get_db_connection()
-    cursor = db.cursor(buffered=True)
-    
-    cursor.execute("SELECT card_uid FROM parking_logs ORDER BY time DESC LIMIT 1")
-    latest_log = cursor.fetchone()
-    cursor.close()
-    
-    processed_logs = []
-
-    if latest_log:
-        latest_uid = latest_log[0]
-        cr = db.cursor(buffered=True)
-        cr.execute(
-            "SELECT student_id, student_name, year_level, course, profile_type, img FROM users WHERE tag_id = %s",
-            (latest_uid,)
-        )
-        rows = cr.fetchall()
-        cr.close()
-        
-        for row in rows:
-            img_data = row[5]
-            img_src = f"data:image/png;base64,{base64.b64encode(img_data).decode('utf-8')}" if img_data else None
-            processed_logs.append({
-                "student_id": row[0],
-                "student_name": row[1],
-                "year_level": row[2],
-                "course": row[3],
-                "profile_type": row[4],
-                "img": img_src
-            })
-    db.close()
-
-    return render_template('acc_info.html', Logs=processed_logs)
 
 @app.route('/register', methods=['GET', 'POST'])
 def reg():
@@ -114,8 +79,10 @@ def reg():
 
         uid = request.form['uid']
         name = request.form['nm']
+        pos = request.form['pos']
         vec_t = request.form['vehicle_type']
         vec_p = request.form['vehicle_plate']
+
         if len(uid) > 8:
                 flash("uid must only contains 8 characters!", "uid_error")
                 cursor.close()
@@ -135,9 +102,9 @@ def reg():
             
         else:
             cursor.execute("""
-                INSERT INTO employee_vehicle (card_uid, employee_name, vehicle_type, vehicle_plate)
-                VALUES (%s, %s, %s, %s)
-            """, (uid, name, vec_t, vec_p))
+                INSERT INTO employee_vehicle (card_uid, employee_name,position, vehicle_type, vehicle_plate)
+                VALUES (%s, %s, %s, %s,%s)
+            """, (uid, name,pos, vec_t, vec_p))
 
             db.commit()
             cursor.close()
@@ -152,13 +119,19 @@ def delete_log():
     if request.method == 'POST':
         db = get_db_connection()
         cursor = db.cursor()
+
         card_uid = request.form['uid']
+
+        # Delete related logs first (optional if using ON DELETE CASCADE)
+        cursor.execute("DELETE FROM parking_logs WHERE card_uid = %s", (card_uid,))
+        # Delete employee
         cursor.execute("DELETE FROM employee_vehicle WHERE card_uid = %s", (card_uid,))
+
         db.commit()
-
-        db.close()
         cursor.close()
+        db.close()
 
+        flash("Employee and related logs deleted successfully!", "success")
         return redirect(url_for('vehicle'))
 
 

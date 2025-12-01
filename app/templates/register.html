@@ -32,6 +32,8 @@
 
     .container-top img {
         width: 80px;
+        padding-right: 35px;
+
     }
 
     .container {
@@ -152,7 +154,6 @@
         <ul>
             <li><a href="{{url_for('vehicle')}}"><i class="fa-solid fa-address-book"></i> Employee Vehicle</a></li>
             <li><a href="{{url_for('park_logs')}}"><i class="fa-solid fa-car"></i> Parking Logs</a></li>
-            <li><a href="{{url_for('acc_info')}}"><i class="fa-solid fa-user"></i> User Information</a></li>
             <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
             <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
         </ul>
@@ -177,6 +178,20 @@
             <div>
                 <label for="nm">EMPLOYEE NAME</label>
                 <input id="nm" name="nm" type="text" placeholder="Surname, Firstname M." required>
+            </div>
+            <div>
+                <label for="vehicle_type">Position</label>
+                <select id="pos" name="pos" required>
+                    <option value="" disabled selected>Position</option>
+                    <option value="Faculty">Faculty</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Crew">Crew</option>
+                    <option value="Student">Student</option>
+                    <option value="Professor/Teacher">Professor/Teacher</option>
+                    <option value="Administrator">Administrator</option>
+                    <option value="Other">Other</option>
+
+                </select>
             </div>
             <div>
                 <label for="vehicle_type">VEHICLE TYPE</label>
