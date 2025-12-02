@@ -82,7 +82,12 @@ def reg():
         pos = request.form['pos']
         vec_t = request.form['vehicle_type']
         vec_p = request.form['vehicle_plate']
+        file = request.files.get('image')
 
+        if not file or file.filename == '':
+            flash("Please upload an image!", "error")
+            return redirect(url_for('reg'))
+        image_bytes = file.read()
         if len(uid) > 8:
                 flash("uid must only contains 8 characters!", "uid_error")
                 cursor.close()
@@ -102,9 +107,9 @@ def reg():
             
         else:
             cursor.execute("""
-                INSERT INTO employee_vehicle (card_uid, employee_name,position, vehicle_type, vehicle_plate)
-                VALUES (%s, %s, %s, %s,%s)
-            """, (uid, name,pos, vec_t, vec_p))
+                INSERT INTO employee_vehicle (card_uid, employee_name,position, vehicle_type, vehicle_plate, img)
+                VALUES (%s,%s, %s, %s, %s,%s)
+            """, (uid, name,pos, vec_t, vec_p,image_bytes,))
 
             db.commit()
             cursor.close()
@@ -122,9 +127,7 @@ def delete_log():
 
         card_uid = request.form['uid']
 
-        # Delete related logs first (optional if using ON DELETE CASCADE)
         cursor.execute("DELETE FROM parking_logs WHERE card_uid = %s", (card_uid,))
-        # Delete employee
         cursor.execute("DELETE FROM employee_vehicle WHERE card_uid = %s", (card_uid,))
 
         db.commit()
@@ -134,8 +137,61 @@ def delete_log():
         flash("Employee and related logs deleted successfully!", "success")
         return redirect(url_for('vehicle'))
 
+@app.route('/user_info', methods=['GET'])
+def user_info():
+    inputted_uid = request.args.get('uid', '').strip()
 
+    db = get_db_connection()
+    cursor = db.cursor(buffered=True)
 
+    if inputted_uid:
+        uid_to_use = inputted_uid
+    else:
+        cursor.execute("SELECT card_uid FROM parking_logs ORDER BY time DESC LIMIT 1")
+        latest_log = cursor.fetchone()
+        if latest_log:
+            uid_to_use = latest_log[0]
+        else:
+            uid_to_use = None
+
+    processed_logs = []
+
+    if uid_to_use:
+        cr = db.cursor(buffered=True)
+        cr.execute(
+            "SELECT card_uid, employee_name, position, vehicle_type, vehicle_plate, img "
+            "FROM employee_vehicle WHERE card_uid = %s OR vehicle_plate = %s",
+            (uid_to_use, uid_to_use,)
+        )
+        rows = cr.fetchall()
+        cr.close()
+
+        for row in rows:
+            img_data = row[5]
+            img_src = f"data:image/png;base64,{base64.b64encode(img_data).decode('utf-8')}" if img_data else None
+            processed_logs.append({
+                "student_id": row[0],
+                "student_name": row[1],
+                "year_level": row[2],
+                "course": row[3],
+                "profile_type": row[4],
+                "img": img_src
+            })
+
+    if not processed_logs:
+        processed_logs.append({
+            "student_id": "N/A",
+            "student_name": "No data available",
+            "year_level": "-",
+            "course": "-",
+            "profile_type": "-",
+            "img": None
+        })
+
+    cursor.close()
+    db.close()
+
+    return render_template('user_info.html', Logs=processed_logs)
 
 
 

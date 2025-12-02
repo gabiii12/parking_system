@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         body {
             margin: 0;
-            background: linear-gradient(to bottom, #161717, #241F24);
-            font-family: 'Inter', sans-serif;
             background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
             url("../static/images/tam.jpg");
+            font-family: 'Inter', sans-serif;
             background-size: cover;
         }
 
         .container-top {
             width: 100%;
-            background-color:#76262C;
+            background-color: #76262C;
             height: 70px;
             padding: 10px 20px;
             color: white;
@@ -75,8 +73,8 @@
             margin: 20px;
             padding: 20px;
             border-radius: 5px;
-            overflow-x: auto; 
             opacity: 0.85;
+            overflow-x: auto; 
         }
 
         table {
@@ -88,6 +86,7 @@
         th, td {
             padding: 12px;
             text-align: left;
+            width: 15%; 
         }
 
         th {
@@ -105,8 +104,6 @@
         }.exit{
             color:red;
             font-weight: bold;
-        }#delete{
-            color: red;
         }
 
     </style>
@@ -120,8 +117,6 @@
     </div>
 
     <div class="container">
-
-        <!-- SIDE BAR -->
         <div class="side_bar">
             <ul>
                 <li><a href="{{url_for('vehicle')}}"><i class="fa-solid fa-address-book"></i> Employee Vehicle</a></li>
@@ -129,58 +124,54 @@
                 <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
                 <li><a href="{{url_for('user_info')}}"><i class="fa-solid fa-person"></i> Employee Information </a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
-
             </ul>
         </div>
-        
+
+        <!-- TABLE SECTION -->
         <div class="box">
-            <input type="text" id="uidf" placeholder="Filter by CARD UID" class="filter-input">
-
-            <table id="history">
-                <tr>
-                    <th>CARD UID</th>
-                    <th>EMPLOYEE NAME</th>
-                    <th>VEHICLE PLATE</th>
-                    <th>LAST ACTION</th>
-                    <th>TIME</th>
-
-
-                </tr>
-
-                {% for row in logs %}
-                <tr>
-                    <td>{{row[0]}}</td>
-                    <td>{{row[1]}}</td>
-                    <td>{{row[2]}}</td>
-                    <td class ="{{'entry' if row[3] == 'ENTRY' else 'exit'}}">{{row[3]}}</td>
-                    <td>{{row[4]}}</td>
-                    
-                </tr>
-                {% endfor %}
-            </table>
+            <table>
+    <thead>
+        <form method="GET" action="{{ url_for('user_info') }}">
+        <input type="text" id="uidf" name="uid" placeholder="UID OR PLATE NUMBER" class="filter-input">
+        <button type="submit">Search</button>
+        </form>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Vehicle Type</th>
+            <th>Plate Number</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if Logs %}
+            {% for row in Logs %}
+            <tr>
+                <td>{{ row.student_id }}</td>
+                <td>{{ row.student_name }}</td>
+                <td>{{ row.year_level }}</td>
+                <td>{{ row.course }}</td>
+                <td>{{ row.profile_type }}</td>
+                <td>
+                    {% if row.img %}
+                        <img src="{{ row.img }}" width="100" height="100">
+                    {% else %}
+                        No image
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">No data available</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
         </div>
 
     </div>
-    <script>
-        const uidint = document.getElementById('uidf');
-        const table = document.getElementById('history');
-
-        uidint.addEventListener('keyup', function(){
-            const filter = uidint.value.toUpperCase();
-            const trs = table.getElementsByTagName('tr');
-
-            for (let i = 1; i <trs.length; i++){
-                const td = trs[i].getElementsByTagName('td')[0];
-                if(td){
-                    const value = td.textContent || td.innerText;
-                    trs[i].style.display = value.toUpperCase().includes(filter) ? '':'none';
-                }
-            }
-        });
-
-
-
-    </script>
 
 </body>
 </html>

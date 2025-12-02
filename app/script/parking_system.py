@@ -3,7 +3,7 @@ import serial
 import time
 import mysql.connector
 
-port = 'COM4'
+port = 'COM5'
 baud = 9600
 class Parking:
     def __init__(self):
