@@ -157,6 +157,7 @@ def user_info():
     processed_logs = []
 
     if uid_to_use:
+
         cr = db.cursor(buffered=True)
         cr.execute(
             "SELECT card_uid, employee_name, position, vehicle_type, vehicle_plate, img "
@@ -179,6 +180,7 @@ def user_info():
             })
 
     if not processed_logs:
+        uid_to_use = None
         processed_logs.append({
             "student_id": "N/A",
             "student_name": "No data available",
@@ -197,4 +199,4 @@ def user_info():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)

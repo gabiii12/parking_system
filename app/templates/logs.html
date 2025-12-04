@@ -7,46 +7,50 @@
     <style>
         body {
             margin: 0;
-            background: linear-gradient(to bottom, #161717, #241F24);
             font-family: 'Inter', sans-serif;
-            background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-            url("../static/images/tam.jpg");
+
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                        url("../static/images/tam.jpg");
             background-size: cover;
+            background-position: center;
+            color: #fff;
         }
 
+        /* ---------- HEADER ---------- */
         .container-top {
             width: 100%;
-            background-color:#76262C;
-            height: 70px;
-            padding: 10px 20px;
-            color: white;
+            background-color: #7B2021;
+            height: 75px;
+            padding: 10px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0px 3px 12px rgba(0,0,0,0.4);
         }
 
         .container-top img {
-            width: 80px;
-            padding-right: 35px;
+            width: 65px;
+            margin-right: 50px;
         }
 
         .container-top h1 {
             margin: 0;
-            font-size: 22px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
+        /* ---------- LAYOUT ---------- */
         .container {
             display: flex;
-            width: 100%;
-            height: calc(100vh - 80px);
+            height: calc(100vh - 75px);
         }
 
+        /* ---------- SIDEBAR ---------- */
         .side_bar {
-            width: 200px;
-            min-width: 180px;
-            background-color: #2B0F10;
-            padding-top: 20px;
-            height: 100%;
+            width: 220px;
+            background-color: #201011;
+            padding-top: 25px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.4);
         }
 
         .side_bar ul {
@@ -55,60 +59,79 @@
         }
 
         .side_bar ul li {
-            margin-bottom: 40px;
+            margin-bottom: 5px;
         }
 
         .side_bar a {
+            color: #f5f5f5;
             text-decoration: none;
-            color: white;
-            padding: 12px 20px;
+            padding: 14px 25px;
             display: block;
+            font-size: 15px;
+            transition: 0.25s;
+            border-left: 3px solid transparent;
+        }
+
+        .side_bar a i {
+            margin-right: 10px;
         }
 
         .side_bar a:hover {
             background-color: #3E40AF;
+            border-left: 3px solid white;
         }
 
+        /* ---------- CONTENT BOX (FIXED WIDTH) ---------- */
         .box {
             flex: 1;
-            background: #5E6060;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 5px;
-            overflow-x: auto; 
-            opacity: 0.85;
+            margin: 40px 40px 40px 40px;
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.35);
+            max-width: calc(100% - 80px);      /* <--- prevents overflow */
+            overflow-x: auto;
         }
 
+        /* ---------- FILTER INPUT ---------- */
+        .filter-input {
+            width: 250px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        /* ---------- TABLE ---------- */
         table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 5px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
+            border-spacing: 0 8px;
         }
 
         th {
             background: #7B2021;
             color: white;
-            border-radius: 5px;
+            padding: 14px;
+            text-align: left;
+            border-radius: 6px;
+            font-weight: 600;
         }
 
         td {
-            background: #fff;
-            border-radius: 5px;
-        }.entry{
-            color:green;
-            font-weight: bold;
-        }.exit{
-            color:red;
-            font-weight: bold;
-        }#delete{
-            color: red;
+            background: #fafafa;
+            color: #222;
+            padding: 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 14px;
         }
 
+        /* ENTRY & EXIT COLORS */
+        .entry { color: green; font-weight: bold; }
+        .exit { color: red;   font-weight: bold; }
     </style>
 </head>
 <body>
@@ -119,20 +142,21 @@
         <img src="../static/images/ccs.png" alt="Logo">
     </div>
 
+    <!-- MAIN LAYOUT -->
     <div class="container">
 
-        <!-- SIDE BAR -->
+        <!-- SIDEBAR -->
         <div class="side_bar">
             <ul>
                 <li><a href="{{url_for('vehicle')}}"><i class="fa-solid fa-address-book"></i> Employee Vehicle</a></li>
                 <li><a href="{{url_for('park_logs')}}"><i class="fa-solid fa-car"></i> Parking Logs</a></li>
                 <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
-                <li><a href="{{url_for('user_info')}}"><i class="fa-solid fa-person"></i> Employee Information </a></li>
+                <li><a href="{{url_for('user_info')}}"><i class="fa-solid fa-person"></i> Employee Information</a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
-
             </ul>
         </div>
-        
+
+        <!-- CONTENT BOX -->
         <div class="box">
             <input type="text" id="uidf" placeholder="Filter by CARD UID" class="filter-input">
 
@@ -143,8 +167,6 @@
                     <th>VEHICLE PLATE</th>
                     <th>LAST ACTION</th>
                     <th>TIME</th>
-
-
                 </tr>
 
                 {% for row in logs %}
@@ -152,15 +174,16 @@
                     <td>{{row[0]}}</td>
                     <td>{{row[1]}}</td>
                     <td>{{row[2]}}</td>
-                    <td class ="{{'entry' if row[3] == 'ENTRY' else 'exit'}}">{{row[3]}}</td>
+                    <td class="{{'entry' if row[3] == 'ENTRY' else 'exit'}}">{{row[3]}}</td>
                     <td>{{row[4]}}</td>
-                    
                 </tr>
                 {% endfor %}
             </table>
         </div>
 
     </div>
+
+    <!-- FILTER SCRIPT -->
     <script>
         const uidint = document.getElementById('uidf');
         const table = document.getElementById('history');
@@ -169,17 +192,14 @@
             const filter = uidint.value.toUpperCase();
             const trs = table.getElementsByTagName('tr');
 
-            for (let i = 1; i <trs.length; i++){
+            for (let i = 1; i < trs.length; i++) {
                 const td = trs[i].getElementsByTagName('td')[0];
                 if(td){
                     const value = td.textContent || td.innerText;
-                    trs[i].style.display = value.toUpperCase().includes(filter) ? '':'none';
+                    trs[i].style.display = value.toUpperCase().includes(filter) ? '' : 'none';
                 }
             }
         });
-
-
-
     </script>
 
 </body>

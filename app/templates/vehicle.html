@@ -6,46 +6,50 @@
     <style>
         body {
             margin: 0;
-            background: linear-gradient(to bottom, #161717, #241F24);
             font-family: 'Inter', sans-serif;
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-            url("../static/images/tam.jpg");
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                        url("../static/images/tam.jpg");
             background-size: cover;
-
+            background-position: center;
+            color: #fff;
         }
 
+        /* HEADER */
         .container-top {
             width: 100%;
-            background-color: #76262C;
-            height: 70px;
-            padding: 10px 20px;
-            color: white;
+            background-color: #7B2021;
+            height: 75px;
+            padding: 10px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0px 3px 12px rgba(0,0,0,0.4);
         }
 
         .container-top img {
-            width: 80px;
-            padding-right: 35px;
+            width: 70px;
+            margin-right: 50px;
+
         }
 
         .container-top h1 {
             margin: 0;
-            font-size: 22px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
+        /* MAIN LAYOUT */
         .container {
             display: flex;
-            width: 100%;
+            height: calc(100vh - 75px);
         }
 
+        /* SIDEBAR */
         .side_bar {
-            width: 200px;
-            min-width: 180px;
-            background-color: #2B0F10;
-            padding-top: 20px;
-            height: 100vh;
+            width: 220px;
+            background-color: #201011;
+            padding-top: 25px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.4);
         }
 
         .side_bar ul {
@@ -54,61 +58,80 @@
         }
 
         .side_bar ul li {
-            margin-bottom: 40px;
+            margin-bottom: 5px;
         }
 
         .side_bar a {
             text-decoration: none;
-            color: white;
-            padding: 12px 20px;
+            color: #f5f5f5;
+            padding: 14px 25px;
             display: block;
+            font-size: 15px;
+            transition: 0.25s;
+            border-left: 3px solid transparent;
         }
 
         .side_bar a:hover {
             background-color: #3E40AF;
+            border-left: 3px solid white;
         }
 
+        .side_bar a i {
+            margin-right: 10px;
+        }
+
+        /* CONTENT BOX */
         .box {
             flex: 1;
-            background: #5E6060;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 5px;
-            overflow-x: auto; 
-            opacity: 0.85;
+            margin: 40px;
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.35);
+            max-width: calc(100% - 80px); /* prevents overflowing */
+            overflow-x: auto;
         }
 
+        /* TABLE */
         table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 5px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            width: 25%; 
+            border-spacing: 0 8px;
         }
 
         th {
             background: #7B2021;
             color: white;
-            border-radius: 5px;
+            padding: 14px;
+            border-radius: 6px;
+            text-align: left;
+            font-weight: 600;
         }
 
         td {
-            background: #fff;
-            border-radius: 5px;
+            background: #fafafa;
+            color: #222;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .box button{
-            color: white;
-            border-radius: 5px;
-            border-color: red;
-            background-color: red;
 
-        }.box button:hover{
+        /* DELETE BUTTON */
+        .delete {
+            padding: 8px 15px;
+            background-color: #c62828;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        .delete:hover {
+            background-color: #e53935;
             transform: scale(1.05);
-            transition: 0.2s;
             cursor: pointer;
         }
     </style>
@@ -129,12 +152,12 @@
                 <li><a href="{{url_for('vehicle')}}"><i class="fa-solid fa-address-book"></i> Employee Vehicle</a></li>
                 <li><a href="{{url_for('park_logs')}}"><i class="fa-solid fa-car"></i> Parking Logs</a></li>
                 <li><a href="{{url_for('reg')}}"><i class="fa-solid fa-address-card"></i> Register Employee Vehicle</a></li>
-                <li><a href="{{url_for('user_info')}}"><i class="fa-solid fa-person"></i> Employee Information </a></li>
+                <li><a href="{{url_for('user_info')}}"><i class="fa-solid fa-person"></i> Employee Information</a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
             </ul>
         </div>
 
-        <!-- TABLE SECTION -->
+        <!-- MAIN BOX -->
         <div class="box">
             <table>
                 <tr>
@@ -154,11 +177,11 @@
                     <td>{{row[3]}}</td>
                     <td>{{row[4]}}</td>
                     <td>
-                    <form action="{{url_for('delete_log')}}" method = 'POST'
-                        onsubmit="return confirm('Delete this EMPLOYEE?')">
-                        <input type ="hidden" name="uid" value="{{row[0]}}">
-                    <button type = 'submit' class ="delete">DELETE</button>
-                    </form>
+                        <form action="{{url_for('delete_log')}}" method="POST"
+                              onsubmit="return confirm('Delete this EMPLOYEE?')">
+                            <input type="hidden" name="uid" value="{{row[0]}}">
+                            <button type="submit" class="delete">DELETE</button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
